@@ -1,0 +1,84 @@
+.right_bule_background {
+    flex: 1;
+    /* 占据剩余空间 */
+    margin-top: 10px;
+    margin-right: 5px;
+    padding: 30px;
+    /* 内部留白，与参考图一致 */
+    background-color: write;
+    /* 右侧白色背景 */
+    flex-direction: column;
+}
+
+.right_title {
+
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.right_title h1 {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.right_title span {
+    display: flex;
+    justify-content: center;
+}
+
+.department_title {
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+
+.department_title h1 {
+    font-size: 25px;
+    font-weight: bold;
+    color: #25578a;
+
+}
+
+.department_title_icon {
+    width: 35px;
+    height: 35px;
+    font-weight: bold;
+    background-color: #245888;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.department_content_item {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.department_content_item_main {
+    display: flex;
+    /* 启用 Flex 布局 */
+    justify-content: space-between;
+    /* 均匀分布，两端对齐 */
+    align-items: center;
+    /* 垂直居中对齐 */
+    width: 100%;
+}
+
+.department_content_item_sub {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+}
+
+.department hr {
+    margin-top: 0px;
+}

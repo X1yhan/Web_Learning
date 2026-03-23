@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历信息填写</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #245888;
+            margin-bottom: 30px;
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .form-section h2 {
+            color: #245888;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .form-row .form-group {
+            flex: 1;
+        }
+        .hobby-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .hobby-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .experience-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+        }
+        .experience-item h3 {
+            color: #245888;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .add-btn {
+            background-color: #245888;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .add-btn:hover {
+            background-color: #1a5380;
+        }
+        .submit-btn {
+            background-color: #245888;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background-color: #1a5380;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-user-edit"></i> 简历信息填写</h1>
+        
+        <form action="#" method="post">
+            <!-- 基本信息 -->
+            <div class="form-section">
+                <h2><i class="fas fa-id-card"></i> 基本信息</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">姓名</label>
+                        <input type="text" id="name" name="name" placeholder="请输入姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">年龄</label>
+                        <input type="number" id="age" name="age" placeholder="请输入年龄">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address">地址</label>
+                        <input type="text" id="address" name="address" placeholder="请输入地址">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">电话</label>
+                        <input type="tel" id="phone" name="phone" placeholder="请输入电话">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">邮箱</label>
+                        <input type="email" id="email" name="email" placeholder="请输入邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label for="education">学历</label>
+                        <select id="education" name="education">
+                            <option value="本科" selected>本科</option>
+                            <option value="专科">专科</option>
+                            <option value="硕士">硕士</option>
+                            <option value="博士">博士</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                        <label for="major">专业</label>
+                        <input type="text" id="major" name="major" placeholder="请输入专业">
+                    </div>
+                <div class="form-group">
+                        <label for="job-intention">求职意向</label>
+                        <input type="text" id="job-intention" name="job-intention" placeholder="请输入求职意向">
+                    </div>
+            </div>
+
+            <!-- 教育背景 -->
+            <div class="form-section">
+                <h2><i class="fas fa-graduation-cap"></i> 教育背景</h2>
+                <div class="experience-item">
+                    <h3>教育经历 1</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edu-time">时间范围</label>
+                            <input type="text" id="edu-time" name="edu-time" placeholder="如：20XX-200XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="edu-school">学校名称</label>
+                            <input type="text" id="edu-school" name="edu-school" placeholder="请输入学校名称">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edu-major">专业</label>
+                            <input type="text" id="edu-major" name="edu-major" placeholder="请输入专业">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edu-courses">主修课程</label>
+                        <textarea id="edu-courses" name="edu-courses" placeholder="请输入主修课程"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addEducation()">添加教育经历</button>
+            </div>
+
+            <!-- 实践经历 -->
+            <div class="form-section">
+                <h2><i class="fas fa-briefcase"></i> 实践经历</h2>
+                <div class="experience-item">
+                    <h3>实践经历 1</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="intern-time">时间范围</label>
+                            <input type="text" id="intern-time" name="intern-time" placeholder="如：20XX-200XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="intern-company">公司名称</label>
+                            <input type="text" id="intern-company" name="intern-company" placeholder="请输入公司名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="intern-position">职位</label>
+                            <input type="text" id="intern-position" name="intern-position" placeholder="请输入职位">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="intern-content">工作内容</label>
+                        <textarea id="intern-content" name="intern-content" placeholder="请输入工作内容"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addInternship()">添加实践经历</button>
+            </div>
+
+            <!-- 校园经历 -->
+            <div class="form-section">
+                <h2><i class="fas fa-school"></i> 校园经历</h2>
+                <div class="experience-item">
+                    <h3>校园经历 1</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="campus-time">时间范围</label>
+                            <input type="text" id="campus-time" name="campus-time" placeholder="如：20XX-200XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="campus-org">组织名称</label>
+                            <input type="text" id="campus-org" name="campus-org" placeholder="请输入组织名称">
+                        </div>
+                        <div class="form-group">
+                            <label for="campus-position">职位</label>
+                            <input type="text" id="campus-position" name="campus-position" placeholder="请输入职位">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="campus-content">工作内容</label>
+                        <textarea id="campus-content" name="campus-content" placeholder="请输入工作内容"></textarea>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addCampusExperience()">添加校园经历</button>
+            </div>
+
+            <!-- 专业技能 -->
+            <div class="form-section">
+                <h2><i class="fas fa-award"></i> 专业技能</h2>
+                <div class="form-group">
+                        <label for="skills">技能描述</label>
+                        <textarea id="skills" name="skills" placeholder="请输入专业技能"></textarea>
+                    </div>
+            </div>
+
+            <!-- 自我评价 -->
+            <div class="form-section">
+                <h2><i class="fas fa-comments"></i> 自我评价</h2>
+                <div class="form-group">
+                        <label for="summary">自我描述</label>
+                        <textarea id="summary" name="summary" placeholder="请输入自我评价"></textarea>
+                    </div>
+            </div>
+
+            <!-- 兴趣爱好 -->
+            <div class="form-section">
+                <h2><i class="fas fa-heart"></i> 兴趣爱好</h2>
+                <div class="hobby-group">
+                    <div class="hobby-item">
+                        <input type="checkbox" id="hobby-music" name="hobby" value="音乐">
+                        <label for="hobby-music">音乐</label>
+                    </div>
+                    <div class="hobby-item">
+                        <input type="checkbox" id="hobby-badminton" name="hobby" value="羽毛球">
+                        <label for="hobby-badminton">羽毛球</label>
+                    </div>
+                    <div class="hobby-item">
+                        <input type="checkbox" id="hobby-photography" name="hobby" value="摄影">
+                        <label for="hobby-photography">摄影</label>
+                    </div>
+                    <div class="hobby-item">
+                        <input type="checkbox" id="hobby-painting" name="hobby" value="绘画">
+                        <label for="hobby-painting">绘画</label>
+                    </div>
+                    <div class="hobby-item">
+                        <input type="checkbox" id="hobby-film" name="hobby" value="电影">
+                        <label for="hobby-film">电影</label>
+                    </div>
+                    <div class="hobby-item">
+                        <input type="checkbox" id="hobby-cycling" name="hobby" value="骑行">
+                        <label for="hobby-cycling">骑行</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 提交按钮 -->
+            <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> 提交</button>
+        </form>
+    </div>
+
+
+</body>
+</html>
