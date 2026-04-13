@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历信息录入</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="resume-container">
+        <div class="header">
+            <h1>张三丰的蓝色简历</h1>
+            <div class="header-buttons">
+                <button class="btn btn-outline">修改名称</button>
+                <button class="btn btn-outline">修改模板</button>
+                <button class="btn btn-primary">预览</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2>基本信息</h2>
+                <div class="section-buttons">
+                    <button class="btn btn-outline btn-small">取消</button>
+                    <button class="btn btn-primary btn-small">保存</button>
+                </div>
+            </div>
+            <div class="section-content">
+                <div class="avatar-upload">
+                    <img src="https://via.placeholder.com/120x120" alt="头像" class="avatar">
+                    <div class="upload-text">
+                        <span>上传头像</span>
+                        <p>数据表明招聘者对真实头像更有好感</p>
+                    </div>
+                </div>
+                <form id="resumeForm" onsubmit="return validateResume()">
+                    <div class="grid-container">
+                        <div class="form-item">
+                            <label>姓名</label>
+                            <input type="text" name="name" placeholder="请输入姓名">
+                            <span class="error" id="nameError"></span>
+                        </div>
+                        <div class="form-item">
+                            <label>性别</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="gender" value="男" checked> 男</label>
+                                <label><input type="radio" name="gender" value="女"> 女</label>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label>出生日期</label>
+                            <input type="date" name="birthdate">
+                            <span class="error" id="birthdateError"></span>
+                        </div>
+                        <div class="form-item">
+                            <label>民族</label>
+                            <select name="nation">
+                                <option value="汉族">汉族</option>
+                                <option value="蒙古族">蒙古族</option>
+                                <option value="回族">回族</option>
+                                <option value="藏族">藏族</option>
+                                <option value="维吾尔族">维吾尔族</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label>学历</label>
+                            <select name="education">
+                                <option value="本科">本科</option>
+                                <option value="大专">大专</option>
+                                <option value="硕士">硕士</option>
+                                <option value="博士">博士</option>
+                                <option value="高中">高中</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label>政治面貌</label>
+                            <select name="politicalStatus">
+                                <option value="党员">党员</option>
+                                <option value="团员">团员</option>
+                                <option value="群众">群众</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label>邮箱</label>
+                            <input type="email" name="email" placeholder="请输入邮箱">
+                            <span class="error" id="emailError"></span>
+                        </div>
+                        <div class="form-item">
+                            <label>联系电话</label>
+                            <input type="tel" name="phone" placeholder="请输入联系电话">
+                            <span class="error" id="phoneError"></span>
+                        </div>
+                        <div class="form-item">
+                            <label>身体状态</label>
+                            <select name="health">
+                                <option value="良好">良好</option>
+                                <option value="一般">一般</option>
+                                <option value="较差">较差</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>求职意向</h2>
+                    <div class="section-buttons">
+                        <button class="btn btn-outline btn-small">取消</button>
+                        <button class="btn btn-primary btn-small">保存</button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="grid-container">
+                        <div class="form-item">
+                            <label>期望行业</label>
+                            <select name="industry">
+                                <option value="互联网/计算机软件/IT服务">互联网/计算机软件/IT服务</option>
+                                <option value="金融">金融</option>
+                                <option value="教育">教育</option>
+                                <option value="医疗">医疗</option>
+                                <option value="制造业">制造业</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label>求职岗位</label>
+                            <select name="position">
+                                <option value="Java后端开发">Java后端开发</option>
+                                <option value="前端开发">前端开发</option>
+                                <option value="测试工程师">测试工程师</option>
+                                <option value="产品经理">产品经理</option>
+                                <option value="UI设计">UI设计</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label>求职地点</label>
+                            <select name="location">
+                                <option value="">请选择</option>
+                                <option value="北京">北京</option>
+                                <option value="上海">上海</option>
+                                <option value="广州">广州</option>
+                                <option value="深圳">深圳</option>
+                                <option value="杭州">杭州</option>
+                                <option value="成都">成都</option>
+                            </select>
+                            <span class="error" id="locationError"></span>
+                        </div>
+                        <div class="form-item salary-range">
+                            <label>期望薪资</label>
+                            <div class="salary-wrapper">
+                                <select name="salaryMin">
+                                    <option value="3k">3k</option>
+                                    <option value="5k">5k</option>
+                                    <option value="7k">7k</option>
+                                    <option value="10k">10k</option>
+                                    <option value="15k">15k</option>
+                                    <option value="20k">20k</option>
+                                </select>
+                                <span>-</span>
+                                <select name="salaryMax">
+                                    <option value="5k">5k</option>
+                                    <option value="7k">7k</option>
+                                    <option value="10k">10k</option>
+                                    <option value="15k">15k</option>
+                                    <option value="20k">20k</option>
+                                    <option value="30k">30k</option>
+                                </select>
+                                <span>月</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>教育经历</h2>
+                    <div class="section-buttons">
+                        <button class="btn btn-outline btn-small">取消</button>
+                        <button class="btn btn-primary btn-small">保存</button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="edu-container" id="eduContainer">
+                        <div class="edu-item">
+                            <div class="form-item">
+                                <label>学校名称</label>
+                                <input type="text" name="school[]" placeholder="请输入学校名称">
+                            </div>
+                            <div class="form-item">
+                                <label>时间</label>
+                                <div class="date-range">
+                                    <input type="date" name="eduStart[]">
+                                    <span>-</span>
+                                    <input type="date" name="eduEnd[]">
+                                </div>
+                            </div>
+                            <button class="btn-delete" onclick="deleteEduItem(this)">×</button>
+                        </div>
+                        <div class="edu-item">
+                            <div class="form-item">
+                                <label>学校名称</label>
+                                <input type="text" name="school[]" placeholder="请输入学校名称">
+                            </div>
+                            <div class="form-item">
+                                <label>时间</label>
+                                <div class="date-range">
+                                    <input type="date" name="eduStart[]">
+                                    <span>-</span>
+                                    <input type="date" name="eduEnd[]">
+                                </div>
+                            </div>
+                            <button class="btn-delete" onclick="deleteEduItem(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="btn-add" onclick="addEduItem()">新增</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-header">
+                    <h2>工作经历</h2>
+                    <div class="section-buttons">
+                        <button class="btn btn-outline btn-small">取消</button>
+                        <button class="btn btn-primary btn-small">保存</button>
+                    </div>
+                </div>
+                <div class="section-content">
+                    <div class="work-container" id="workContainer">
+                        <div class="work-item">
+                            <div class="form-item">
+                                <label>在职时间</label>
+                                <div class="date-range">
+                                    <input type="date" name="workStart[]">
+                                    <span>-</span>
+                                    <input type="date" name="workEnd[]">
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label>公司名称</label>
+                                <input type="text" name="company[]" placeholder="请输入公司名称">
+                            </div>
+                            <div class="form-item">
+                                <label>职位名称</label>
+                                <select name="jobTitle[]">
+                                    <option value="">请输入</option>
+                                    <option value="工程师">工程师</option>
+                                    <option value="高级工程师">高级工程师</option>
+                                    <option value="技术主管">技术主管</option>
+                                    <option value="经理">经理</option>
+                                </select>
+                            </div>
+                            <div class="form-item">
+                                <label>经历描述</label>
+                                <textarea name="workDesc[]" placeholder="请输入工作经历描述"></textarea>
+                            </div>
+                            <button class="btn-delete" onclick="deleteWorkItem(this)">×</button>
+                        </div>
+                        <div class="work-item">
+                            <div class="form-item">
+                                <label>在职时间</label>
+                                <div class="date-range">
+                                    <input type="date" name="workStart[]">
+                                    <span>-</span>
+                                    <input type="date" name="workEnd[]">
+                                </div>
+                            </div>
+                            <div class="form-item">
+                                <label>公司名称</label>
+                                <input type="text" name="company[]" placeholder="请输入公司名称">
+                            </div>
+                            <div class="form-item">
+                                <label>职位名称</label>
+                                <select name="jobTitle[]">
+                                    <option value="">请输入</option>
+                                    <option value="工程师">工程师</option>
+                                    <option value="高级工程师">高级工程师</option>
+                                    <option value="技术主管">技术主管</option>
+                                    <option value="经理">经理</option>
+                                </select>
+                            </div>
+                            <div class="form-item">
+                                <label>经历描述</label>
+                                <textarea name="workDesc[]" placeholder="请输入工作经历描述"></textarea>
+                            </div>
+                            <button class="btn-delete" onclick="deleteWorkItem(this)">×</button>
+                        </div>
+                    </div>
+                    <button class="btn-add" onclick="addWorkItem()">新增</button>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" form="resumeForm" class="btn btn-primary btn-large">提交简历</button>
+                <button type="reset" form="resumeForm" class="btn btn-outline btn-large">重置</button>
+            </div>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精锐聘才 - 登录</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-left">
+            <h1>人尽锐聘 才达精锐</h1>
+            <div class="illustration">
+                <div class="scene">
+                    <div class="desk">
+                        <div class="person person1"></div>
+                        <div class="person person2"></div>
+                        <div class="monitor"></div>
+                        <div class="plant plant1"></div>
+                        <div class="plant plant2"></div>
+                        <div class="cloud cloud1"></div>
+                        <div class="cloud cloud2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="login-right">
+            <div class="login-card">
+                <h2>精锐聘才</h2>
+                <p>始终坚持"踏实、专业、高效"的服务理念</p>
+                <form id="loginForm" onsubmit="return validateLogin()">
+                    <div class="form-group">
+                        <label for="username">账号</label>
+                        <input type="text" id="username" name="username" placeholder="请输入账号">
+                        <span class="error" id="usernameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" placeholder="请输入密码">
+                            <span class="toggle-password" onclick="togglePassword()">👁</span>
+                        </div>
+                        <span class="error" id="passwordError"></span>
+                        <p class="password-hint">密码至少8位，需包含大写、小写、数字、特殊字符中的三种</p>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="remember" name="remember" checked>
+                        <label for="remember">记住密码</label>
+                    </div>
+                    <button type="submit" class="btn-login">登录</button>
+                </form>
+                <p class="register-link">还没有账号？<a href="resume.html">立即注册</a></p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
