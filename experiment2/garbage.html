@@ -10,23 +10,60 @@
     <div class="garbage-app">
         <h1>垃圾分类问答小程序</h1>
         
-        <div class="category-info">
-            <h2>垃圾分类类别：</h2>
-            <p>1.可回收垃圾; 2.有害垃圾; 3.厨余垃圾; 4.其它垃圾</p>
+        <div class="stats-bar">
+            <span>得分：<span id="score">0</span></span>
+            <span>题目：<span id="current-question">0</span>/<span id="total-questions">0</span></span>
+            <span>正确率：<span id="accuracy">0</span>%</span>
         </div>
         
         <div class="question-area">
+            <div id="question-number">题目</div>
             <div id="garbage-item"></div>
+            <div id="hint">请选择以下垃圾类别</div>
+        </div>
+        
+        <div class="category-buttons">
+            <button class="category-btn recyclable" data-type="可回收垃圾">
+                <div class="btn-icon">♻️</div>
+                <div class="btn-text">可回收垃圾</div>
+            </button>
+            <button class="category-btn hazardous" data-type="有害垃圾">
+                <div class="btn-icon">⚠️</div>
+                <div class="btn-text">有害垃圾</div>
+            </button>
+            <button class="category-btn kitchen" data-type="厨余垃圾">
+                <div class="btn-icon">🥬</div>
+                <div class="btn-text">厨余垃圾</div>
+            </button>
+            <button class="category-btn other" data-type="其他垃圾">
+                <div class="btn-icon">🗑️</div>
+                <div class="btn-text">其他垃圾</div>
+            </button>
+        </div>
+        
+        <div class="feedback-area" id="feedback-area">
+            <div id="feedback-icon"></div>
+            <div id="feedback-message"></div>
+            <div id="correct-answer"></div>
+            <div id="garbage-info"></div>
         </div>
         
         <div class="control-buttons">
-            <button id="start-btn">开始</button>
-            <button id="stop-btn">停止</button>
-            <button id="result-btn">结果</button>
+            <button id="start-btn">开始答题</button>
+            <button id="next-btn" disabled>下一题</button>
+            <button id="reset-btn">结束</button>
         </div>
         
-        <div class="result-area">
-            <div id="result"></div>
+        <div class="result-modal" id="result-modal">
+            <div class="modal-content">
+                <h2>🎉 答题完成！</h2>
+                <div class="final-stats">
+                    <p>总题数：<span id="final-total">0</span></p>
+                    <p>正确数：<span id="final-correct">0</span></p>
+                    <p>正确率：<span id="final-accuracy">0</span>%</p>
+                </div>
+                <button id="close-modal">确定</button>
+            </div>
         </div>
     </div>
     
