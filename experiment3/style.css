@@ -618,3 +618,284 @@ body {
         grid-template-columns: 1fr;
     }
 }
+
+/* 注册页面样式 */
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e88e5 0%, #3949ab 100%);
+    padding: 20px;
+}
+
+.register-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.register-card h2 {
+    font-size: 24px;
+    color: #1e88e5;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.register-card p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.btn-register {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #1e88e5 0%, #3949ab 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: opacity 0.3s;
+}
+
+.btn-register:hover {
+    opacity: 0.9;
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.login-link a {
+    color: #1e88e5;
+    text-decoration: none;
+}
+
+/* 圣杯布局样式 */
+.holy-grail {
+    display: grid;
+    grid-template-columns: 200px 1fr 250px;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+        "header header header"
+        "left-sidebar main-content right-sidebar"
+        "footer footer footer";
+    min-height: 100vh;
+}
+
+.header {
+    grid-area: header;
+    background: linear-gradient(135deg, #1e88e5 0%, #3949ab 100%);
+    color: white;
+    padding: 20px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user-info span {
+    font-size: 14px;
+}
+
+.btn-logout {
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.left-sidebar {
+    grid-area: left-sidebar;
+    background: #2c3e50;
+    padding: 20px;
+    color: white;
+}
+
+.left-sidebar h3 {
+    margin-top: 0;
+    font-size: 16px;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.left-sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.left-sidebar li {
+    margin-bottom: 8px;
+}
+
+.left-sidebar a {
+    color: #bdc3c7;
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.left-sidebar a:hover {
+    background: #34495e;
+    color: white;
+}
+
+.main-content {
+    grid-area: main-content;
+    background: #f5f7fa;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-header {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.content-header h2 {
+    margin: 0 0 8px 0;
+    color: #333;
+}
+
+.content-header p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+}
+
+#content-iframe {
+    flex: 1;
+    width: 100%;
+    min-height: 500px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.right-sidebar {
+    grid-area: right-sidebar;
+    background: #ecf0f1;
+    padding: 20px;
+}
+
+.right-sidebar h3 {
+    margin-top: 0;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.quick-btn {
+    padding: 10px 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.3s;
+    text-align: left;
+}
+
+.quick-btn:hover {
+    background: #e3f2fd;
+    border-color: #1e88e5;
+    color: #1e88e5;
+}
+
+.notifications {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.notifications p {
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    color: #555;
+}
+
+.notifications p:last-child {
+    margin-bottom: 0;
+}
+
+.footer {
+    grid-area: footer;
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 14px;
+}
+
+/* 圣杯布局响应式 */
+@media (max-width: 1024px) {
+    .holy-grail {
+        grid-template-columns: 150px 1fr 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .holy-grail {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto auto;
+        grid-template-areas:
+            "header"
+            "left-sidebar"
+            "main-content"
+            "right-sidebar"
+            "footer";
+    }
+    
+    .left-sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .left-sidebar li {
+        margin-bottom: 0;
+    }
+}

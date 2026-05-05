@@ -1,0 +1,48 @@
+{
+    "basicInfo": {
+        "name": "张三丰",
+        "gender": "男",
+        "birthdate": "1990-01-15",
+        "nation": "汉族",
+        "education": "本科",
+        "politicalStatus": "党员",
+        "email": "zhangsanfeng@example.com",
+        "phone": "13812345678",
+        "health": "良好"
+    },
+    "careerObjective": {
+        "industry": "互联网/计算机软件/IT服务",
+        "position": "Java后端开发",
+        "location": "北京",
+        "salaryMin": "15k",
+        "salaryMax": "20k"
+    },
+    "education": [
+        {
+            "school": "北京大学",
+            "startDate": "2008-09-01",
+            "endDate": "2012-06-30"
+        },
+        {
+            "school": "北京第一中学",
+            "startDate": "2005-09-01",
+            "endDate": "2008-06-30"
+        }
+    ],
+    "workExperience": [
+        {
+            "startDate": "2018-03-01",
+            "endDate": "2024-01-15",
+            "company": "阿里巴巴集团",
+            "jobTitle": "高级工程师",
+            "description": "负责电商平台后端系统开发，参与多个核心项目，主导架构设计和技术选型。"
+        },
+        {
+            "startDate": "2012-07-01",
+            "endDate": "2018-02-28",
+            "company": "百度公司",
+            "jobTitle": "工程师",
+            "description": "参与搜索引擎核心算法优化，负责搜索推荐系统开发。"
+        }
+    ]
+}

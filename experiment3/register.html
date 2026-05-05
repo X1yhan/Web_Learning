@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>精锐聘才 - 注册</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-card">
+            <h2>用户注册</h2>
+            <p>创建您的账号，开始求职之旅</p>
+            <form id="registerForm" onsubmit="return validateRegister()">
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input type="text" id="username" name="username" placeholder="请输入用户名">
+                    <span class="error" id="usernameError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input type="email" id="email" name="email" placeholder="请输入邮箱">
+                    <span class="error" id="emailError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" placeholder="请输入密码">
+                        <span class="toggle-password" onclick="togglePassword('password')">👁</span>
+                    </div>
+                    <span class="error" id="passwordError"></span>
+                    <p class="password-hint">密码至少8位，需包含大写、小写、数字、特殊字符中的三种</p>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">确认密码</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="请再次输入密码">
+                        <span class="toggle-password" onclick="togglePassword('confirmPassword')">👁</span>
+                    </div>
+                    <span class="error" id="confirmPasswordError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="phone">手机号</label>
+                    <input type="tel" id="phone" name="phone" placeholder="请输入手机号">
+                    <span class="error" id="phoneError"></span>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="agree" name="agree">
+                    <label for="agree">我已阅读并同意<a href="#">《用户协议》</a>和<a href="#">《隐私政策》</a></label>
+                    <span class="error" id="agreeError"></span>
+                </div>
+                <button type="submit" class="btn-register">注册</button>
+            </form>
+            <p class="login-link">已有账号？<a href="login.html">立即登录</a></p>
+        </div>
+    </div>
+    
+    <script src="utils.js"></script>
+    <script src="register.js"></script>
+</body>
+</html>

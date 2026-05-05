@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作台 - 圣杯布局</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 圣杯布局 -->
+    <div class="holy-grail">
+        <!-- 顶部导航 -->
+        <header class="header">
+            <h1>精锐聘才 - 工作台</h1>
+            <div class="user-info">
+                <span>欢迎回来，张三</span>
+                <button class="btn-logout" onclick="logout()">退出登录</button>
+            </div>
+        </header>
+        
+        <!-- 左侧菜单 -->
+        <nav class="left-sidebar">
+            <h3>功能菜单</h3>
+            <ul>
+                <li><a href="#" onclick="loadPage('resume')">个人简历</a></li>
+                <li><a href="#" onclick="loadPage('calculator')">计算器</a></li>
+                <li><a href="#" onclick="loadPage('garbage')">小游戏</a></li>
+                <li><a href="#" onclick="loadPage('resumeInput')">简历录入</a></li>
+                <li><a href="#" onclick="loadPage('resumeList')">简历列表</a></li>
+            </ul>
+        </nav>
+        
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <div class="content-header">
+                <h2 id="page-title">欢迎使用工作台</h2>
+                <p id="page-desc">请从左侧菜单选择一个功能模块</p>
+            </div>
+            <iframe id="content-iframe" src="" frameborder="0"></iframe>
+        </main>
+        
+        <!-- 右侧边栏，暂时先不放东西 -->
+
+        
+        <!-- 底部 -->
+        <footer class="footer">
+            <p>© 2024 精锐聘才 - 人尽锐聘 才达精锐</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
