@@ -123,5 +123,10 @@ function fillResumeForm(data) {
  * 页面加载完成后自动加载简历数据
  */
 window.onload = function() {
+    // 先检查登录状态
+    if (typeof initLoginCheck === 'function') {
+        initLoginCheck();
+    }
+    // 加载简历数据
     loadResumeData();
 };

@@ -1,7 +1,39 @@
 /**
  * 个人简历展示页面脚本
- * 从JSON文件加载简历数据并展示
+ * 从localStorage加载简历数据并展示
  */
+
+/**
+ * 获取当前登录用户信息
+ * @returns {Object|null} 用户信息对象
+ */
+function getUserInfo() {
+    try {
+        var userInfoStr = localStorage.getItem('userInfo');
+        return userInfoStr ? JSON.parse(userInfoStr) : null;
+    } catch (e) {
+        console.error('获取用户信息失败:', e);
+        return null;
+    }
+}
+
+/**
+ * 从localStorage获取用户的简历列表
+ * @returns {Array} 简历数组
+ */
+function getUserResumes() {
+    try {
+        var userInfo = getUserInfo();
+        if (!userInfo || !userInfo.username) {
+            return [];
+        }
+        var resumesStr = localStorage.getItem('resumes_' + userInfo.username);
+        return resumesStr ? JSON.parse(resumesStr) : [];
+    } catch (e) {
+        console.error('获取简历列表失败:', e);
+        return [];
+    }
+}
 
 /**
  * 页面加载完成后执行
@@ -11,18 +43,30 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * 使用Axios异步加载简历数据
+ * 加载简历数据
  */
-async function loadResumeData() {
+function loadResumeData() {
     try {
-        // 从JSON文件加载简历数据
-        const response = await axios.get('../experiment3/resume_info.txt');
-        const data = response.data;
+        // 获取选中的简历ID
+        const resumeId = parseInt(sessionStorage.getItem('selectedResumeId'));
         
-        // 填充简历信息
-        fillResumeInfo(data);
+        // 获取用户的简历列表
+        const resumes = getUserResumes();
         
-        console.log('简历数据加载成功:', data);
+        // 查找指定的简历
+        const resumeData = resumes.find(r => r.id === resumeId);
+        
+        if (resumeData) {
+            // 填充简历信息
+            fillResumeInfo(resumeData);
+            console.log('简历数据加载成功:', resumeData);
+        } else if (resumes.length > 0) {
+            // 如果没有选中的简历，显示第一个
+            fillResumeInfo(resumes[0]);
+            console.log('简历数据加载成功:', resumes[0]);
+        } else {
+            showError('暂无简历数据，请先录入简历');
+        }
     } catch (error) {
         console.error('加载简历数据失败:', error);
         showError('加载简历数据失败，请稍后重试');
@@ -45,6 +89,17 @@ function fillResumeInfo(data) {
         document.getElementById('email').textContent = data.basicInfo.email || '未填写';
         document.getElementById('phone').textContent = data.basicInfo.phone || '未填写';
         document.getElementById('health').textContent = data.basicInfo.health || '未填写';
+    } else if (data['基本Info']) {
+        // 兼容旧格式
+        document.getElementById('name').textContent = data['基本Info'].name || '未填写';
+        document.getElementById('gender').textContent = data['基本Info'].gender || '未填写';
+        document.getElementById('birthdate').textContent = data['基本Info'].birthdate || '未填写';
+        document.getElementById('nation').textContent = data['基本Info'].nation || '未填写';
+        document.getElementById('education').textContent = data['基本Info'].education || '未填写';
+        document.getElementById('politicalStatus').textContent = data['基本Info'].politicalStatus || '未填写';
+        document.getElementById('email').textContent = data['基本Info'].email || '未填写';
+        document.getElementById('phone').textContent = data['基本Info'].phone || '未填写';
+        document.getElementById('health').textContent = data['基本Info'].health || '未填写';
     }
     
     // 填充求职意向

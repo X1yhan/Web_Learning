@@ -41,6 +41,13 @@ function validateLogin() {
         };
         alert('登录信息验证通过！\n\n' + JSON.stringify(loginData, null, 2));
         
+        // 保存用户信息到 localStorage
+        var userInfo = {
+            username: username,
+            loginTime: new Date().toISOString()
+        };
+        localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        
         // 跳转到工作台页面
         window.location.href = '../experiment4/workbench.html';
         return false;

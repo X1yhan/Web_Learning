@@ -3,10 +3,69 @@
  */
 
 /**
+ * 登录状态检测间隔时间（毫秒）
+ * 设置为5分钟检测一次
+ */
+var LOGIN_CHECK_INTERVAL = 5 * 60 * 1000;
+
+/**
+ * 登录状态检测定时器
+ */
+var loginCheckTimer = null;
+
+/**
+ * 检查登录状态
+ * @returns {boolean} - 是否已登录
+ */
+function checkLoginStatus() {
+    var userInfo = getUserInfo();
+    if (!userInfo || !userInfo.username) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * 页面加载时检查登录状态
+ */
+function initLoginCheck() {
+    // 页面加载时立即检查登录状态
+    if (!checkLoginStatus()) {
+        if (confirm('您的登录状态已失效，请重新登录')) {
+            window.location.href = 'login.html';
+        }
+        return;
+    }
+    
+    // 设置定时检测登录状态
+    loginCheckTimer = setInterval(function() {
+        if (!checkLoginStatus()) {
+            clearInterval(loginCheckTimer);
+            if (confirm('您的登录状态已失效，请重新登录')) {
+                window.location.href = 'login.html';
+            }
+        }
+    }, LOGIN_CHECK_INTERVAL);
+    
+    // 页面关闭前清除定时器
+    window.addEventListener('beforeunload', function() {
+        if (loginCheckTimer) {
+            clearInterval(loginCheckTimer);
+        }
+    });
+}
+
+/**
  * 简历表单验证
  * @returns {boolean} - 是否验证通过
  */
 function validateResume() {
+    // 验证前先检查登录状态
+    if (!checkLoginStatus()) {
+        alert('您的登录状态已失效，请重新登录');
+        window.location.href = 'login.html';
+        return false;
+    }
     // 清除所有错误提示
     clearAllErrors();
     
@@ -86,31 +145,82 @@ function validateResume() {
 }
 
 /**
- * 收集并显示所有表单数据
+ * 获取当前登录用户信息
+ * @returns {Object|null} 用户信息对象
+ */
+function getUserInfo() {
+    try {
+        var userInfoStr = localStorage.getItem('userInfo');
+        return userInfoStr ? JSON.parse(userInfoStr) : null;
+    } catch (e) {
+        console.error('获取用户信息失败:', e);
+        return null;
+    }
+}
+
+/**
+ * 保存简历数据到 localStorage
+ * @param {Object} resumeData - 简历数据对象
+ */
+function saveResumeToLocalStorage(resumeData) {
+    try {
+        // 获取当前用户
+        var userInfo = getUserInfo();
+        if (!userInfo || !userInfo.username) {
+            alert('请先登录');
+            window.location.href = 'login.html';
+            return false;
+        }
+        
+        // 获取用户已有的简历列表
+        var userResumes = localStorage.getItem('resumes_' + userInfo.username);
+        var resumes = userResumes ? JSON.parse(userResumes) : [];
+        
+        // 生成唯一ID
+        var maxId = resumes.length > 0 ? Math.max(...resumes.map(r => r.id)) : 0;
+        resumeData.id = maxId + 1;
+        resumeData.createdAt = new Date().toISOString();
+        resumeData.username = userInfo.username;
+        
+        // 添加到列表
+        resumes.push(resumeData);
+        
+        // 保存到 localStorage
+        localStorage.setItem('resumes_' + userInfo.username, JSON.stringify(resumes));
+        
+        return true;
+    } catch (e) {
+        console.error('保存简历失败:', e);
+        return false;
+    }
+}
+
+/**
+ * 收集并保存所有表单数据
  */
 function collectAndShowData() {
     var data = {};
     
     // 收集基本信息
-    data['基本信息'] = {
-        '姓名': document.querySelector('input[name="name"]').value.trim(),
-        '性别': document.querySelector('input[name="gender"]:checked').value,
-        '出生日期': document.querySelector('input[name="birthdate"]').value,
-        '民族': document.querySelector('select[name="nation"]').value,
-        '学历': document.querySelector('select[name="education"]').value,
-        '政治面貌': document.querySelector('select[name="politicalStatus"]').value,
-        '邮箱': document.querySelector('input[name="email"]').value.trim(),
-        '联系电话': document.querySelector('input[name="phone"]').value.trim(),
-        '身体状态': document.querySelector('select[name="health"]').value
+    data['基本Info'] = {
+        'name': document.querySelector('input[name="name"]').value.trim(),
+        'gender': document.querySelector('input[name="gender"]:checked').value,
+        'birthdate': document.querySelector('input[name="birthdate"]').value,
+        'nation': document.querySelector('select[name="nation"]').value,
+        'education': document.querySelector('select[name="education"]').value,
+        'politicalStatus': document.querySelector('select[name="politicalStatus"]').value,
+        'email': document.querySelector('input[name="email"]').value.trim(),
+        'phone': document.querySelector('input[name="phone"]').value.trim(),
+        'health': document.querySelector('select[name="health"]').value
     };
     
     // 收集求职意向
-    data['求职意向'] = {
-        '期望行业': document.querySelector('select[name="industry"]').value,
-        '求职岗位': document.querySelector('select[name="position"]').value,
-        '求职地点': document.querySelector('select[name="location"]').value,
-        '期望薪资': document.querySelector('select[name="salaryMin"]').value + ' - ' + 
-                   document.querySelector('select[name="salaryMax"]').value + '/月'
+    data['careerObjective'] = {
+        'industry': document.querySelector('select[name="industry"]').value,
+        'position': document.querySelector('select[name="position"]').value,
+        'location': document.querySelector('select[name="location"]').value,
+        'salaryMin': document.querySelector('select[name="salaryMin"]').value,
+        'salaryMax': document.querySelector('select[name="salaryMax"]').value
     };
     
     // 收集教育经历
@@ -118,32 +228,56 @@ function collectAndShowData() {
     var eduItems = document.querySelectorAll('.edu-item');
     eduItems.forEach(function(item) {
         eduData.push({
-            '学校名称': item.querySelector('input[name="school[]"]').value.trim(),
-            '开始时间': item.querySelector('input[name="eduStart[]"]').value,
-            '结束时间': item.querySelector('input[name="eduEnd[]"]').value
+            'school': item.querySelector('input[name="school[]"]').value.trim(),
+            'startDate': item.querySelector('input[name="eduStart[]"]').value,
+            'endDate': item.querySelector('input[name="eduEnd[]"]').value
         });
     });
-    data['教育经历'] = eduData;
+    data['education'] = eduData;
     
     // 收集工作经历
     var workData = [];
     var workItems = document.querySelectorAll('.work-item');
     workItems.forEach(function(item) {
         workData.push({
-            '在职时间': item.querySelector('input[name="workStart[]"]').value + ' - ' + 
-                       item.querySelector('input[name="workEnd[]"]').value,
-            '公司名称': item.querySelector('input[name="company[]"]').value.trim(),
-            '职位名称': item.querySelector('select[name="jobTitle[]"]').value,
-            '经历描述': item.querySelector('textarea[name="workDesc[]"]').value.trim()
+            'startDate': item.querySelector('input[name="workStart[]"]').value,
+            'endDate': item.querySelector('input[name="workEnd[]"]').value,
+            'company': item.querySelector('input[name="company[]"]').value.trim(),
+            'jobTitle': item.querySelector('select[name="jobTitle[]"]').value,
+            'description': item.querySelector('textarea[name="workDesc[]"]').value.trim()
         });
     });
-    data['工作经历'] = workData;
+    data['workExperience'] = workData;
     
-    // 使用alert显示所有数据
-    alert('简历信息录入成功！\n\n' + JSON.stringify(data, null, 2));
-    
-    // 输出到控制台
-    console.log('简历表单数据:', data);
+    // 保存到 localStorage
+    if (saveResumeToLocalStorage(data)) {
+        // 使用alert显示所有数据
+        alert('简历信息录入成功！\n\n' + JSON.stringify(data, null, 2));
+        
+        // 输出到控制台
+        console.log('简历表单数据:', data);
+        
+        // 通知父页面（工作台）切换到简历列表
+        // 检查是否在 iframe 中运行
+        if (window.parent && window.parent !== window) {
+            // 如果在 iframe 中，通知父页面切换页面
+            if (typeof window.parent.loadPage === 'function') {
+                setTimeout(function() {
+                    window.parent.loadPage('resumeList');
+                }, 500);
+            } else {
+                // 回退方案：使用 postMessage 通知父页面
+                window.parent.postMessage({ action: 'loadPage', pageName: 'resumeList' }, '*');
+            }
+        } else {
+            // 如果不在 iframe 中，直接跳转
+            setTimeout(function() {
+                window.location.href = '../experiment4/workbench.html?page=resumeList';
+            }, 1000);
+        }
+    } else {
+        alert('保存简历失败，请重试');
+    }
 }
 
 /**
@@ -328,31 +462,82 @@ function validateResume() {
 }
 
 /**
- * 收集并显示所有表单数据
+ * 获取当前登录用户信息
+ * @returns {Object|null} 用户信息对象
+ */
+function getUserInfo() {
+    try {
+        var userInfoStr = localStorage.getItem('userInfo');
+        return userInfoStr ? JSON.parse(userInfoStr) : null;
+    } catch (e) {
+        console.error('获取用户信息失败:', e);
+        return null;
+    }
+}
+
+/**
+ * 保存简历数据到 localStorage
+ * @param {Object} resumeData - 简历数据对象
+ */
+function saveResumeToLocalStorage(resumeData) {
+    try {
+        // 获取当前用户
+        var userInfo = getUserInfo();
+        if (!userInfo || !userInfo.username) {
+            alert('请先登录');
+            window.location.href = 'login.html';
+            return false;
+        }
+        
+        // 获取用户已有的简历列表
+        var userResumes = localStorage.getItem('resumes_' + userInfo.username);
+        var resumes = userResumes ? JSON.parse(userResumes) : [];
+        
+        // 生成唯一ID
+        var maxId = resumes.length > 0 ? Math.max(...resumes.map(r => r.id)) : 0;
+        resumeData.id = maxId + 1;
+        resumeData.createdAt = new Date().toISOString();
+        resumeData.username = userInfo.username;
+        
+        // 添加到列表
+        resumes.push(resumeData);
+        
+        // 保存到 localStorage
+        localStorage.setItem('resumes_' + userInfo.username, JSON.stringify(resumes));
+        
+        return true;
+    } catch (e) {
+        console.error('保存简历失败:', e);
+        return false;
+    }
+}
+
+/**
+ * 收集并保存所有表单数据
  */
 function collectAndShowData() {
     var data = {};
     
     // 收集基本信息
-    data['基本信息'] = {
-        '姓名': document.querySelector('input[name="name"]').value.trim(),
-        '性别': document.querySelector('input[name="gender"]:checked').value,
-        '出生日期': document.querySelector('input[name="birthdate"]').value,
-        '民族': document.querySelector('select[name="nation"]').value,
-        '学历': document.querySelector('select[name="education"]').value,
-        '政治面貌': document.querySelector('select[name="politicalStatus"]').value,
-        '邮箱': document.querySelector('input[name="email"]').value.trim(),
-        '联系电话': document.querySelector('input[name="phone"]').value.trim(),
-        '身体状态': document.querySelector('select[name="health"]').value
+    data['基本Info'] = {
+        'name': document.querySelector('input[name="name"]').value.trim(),
+        'gender': document.querySelector('input[name="gender"]:checked').value,
+        'birthdate': document.querySelector('input[name="birthdate"]').value,
+        'nation': document.querySelector('select[name="nation"]').value,
+        'education': document.querySelector('select[name="education"]').value,
+        'politicalStatus': document.querySelector('select[name="politicalStatus"]').value,
+        'email': document.querySelector('input[name="email"]').value.trim(),
+        'phone': document.querySelector('input[name="phone"]').value.trim(),
+        'health': document.querySelector('select[name="health"]').value
     };
     
     // 收集求职意向
-    data['求职意向'] = {
-        '期望行业': document.querySelector('select[name="industry"]').value,
-        '求职岗位': document.querySelector('select[name="position"]').value,
-        '求职地点': document.querySelector('select[name="location"]').value,
-        '期望薪资': document.querySelector('select[name="salaryMin"]').value + ' - ' + 
-                   document.querySelector('select[name="salaryMax"]').value + '/月'
+    data['careerObjective'] = {
+        'industry': document.querySelector('select[name="industry"]').value,
+        'position': document.querySelector('select[name="position"]').value,
+        'location': document.querySelector('select[name="location"]').value,
+        'salaryMin': document.querySelector('select[name="salaryMin"]').value,
+        'salaryMax': document.querySelector('select[name="salaryMax"]').value
     };
     
     // 收集教育经历
@@ -360,32 +545,55 @@ function collectAndShowData() {
     var eduItems = document.querySelectorAll('.edu-item');
     eduItems.forEach(function(item) {
         eduData.push({
-            '学校名称': item.querySelector('input[name="school[]"]').value.trim(),
-            '开始时间': item.querySelector('input[name="eduStart[]"]').value,
-            '结束时间': item.querySelector('input[name="eduEnd[]"]').value
+            'school': item.querySelector('input[name="school[]"]').value.trim(),
+            'startDate': item.querySelector('input[name="eduStart[]"]').value,
+            'endDate': item.querySelector('input[name="eduEnd[]"]').value
         });
     });
-    data['教育经历'] = eduData;
+    data['education'] = eduData;
     
     // 收集工作经历
     var workData = [];
     var workItems = document.querySelectorAll('.work-item');
     workItems.forEach(function(item) {
         workData.push({
-            '在职时间': item.querySelector('input[name="workStart[]"]').value + ' - ' + 
-                       item.querySelector('input[name="workEnd[]"]').value,
-            '公司名称': item.querySelector('input[name="company[]"]').value.trim(),
-            '职位名称': item.querySelector('select[name="jobTitle[]"]').value,
-            '经历描述': item.querySelector('textarea[name="workDesc[]"]').value.trim()
+            'startDate': item.querySelector('input[name="workStart[]"]').value,
+            'endDate': item.querySelector('input[name="workEnd[]"]').value,
+            'company': item.querySelector('input[name="company[]"]').value.trim(),
+            'jobTitle': item.querySelector('select[name="jobTitle[]"]').value,
+            'description': item.querySelector('textarea[name="workDesc[]"]').value.trim()
         });
     });
-    data['工作经历'] = workData;
+    data['workExperience'] = workData;
     
-    // 使用alert显示所有数据
-    alert('简历信息录入成功！\n\n' + JSON.stringify(data, null, 2));
-    
-    // 输出到控制台
-    console.log('简历表单数据:', data);
+    // 保存到 localStorage
+    if (saveResumeToLocalStorage(data)) {
+        // 使用alert显示所有数据
+        alert('简历信息录入成功！\n\n' + JSON.stringify(data, null, 2));
+        
+        // 输出到控制台
+        console.log('简历表单数据:', data);
+        
+        // 检查是否在 iframe 中运行
+        if (window.parent && window.parent !== window) {
+            // 如果在 iframe 中，通知父页面切换到简历列表
+            if (typeof window.parent.loadPage === 'function') {
+                setTimeout(function() {
+                    window.parent.loadPage('resumeList');
+                }, 500);
+            } else {
+                // 回退方案：使用 postMessage 通知父页面
+                window.parent.postMessage({ action: 'loadPage', pageName: 'resumeList' }, '*');
+            }
+        } else {
+            // 如果不在 iframe 中（直接访问），保持原有跳转逻辑
+            setTimeout(function() {
+                window.location.href = '../experiment4/workbench.html?page=resumeList';
+            }, 1000);
+        }
+    } else {
+        alert('保存简历失败，请重试');
+    }
 }
 
 /**

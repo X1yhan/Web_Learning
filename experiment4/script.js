@@ -64,11 +64,75 @@ function loadPage(pageName) {
 
 /**
  * 退出登录
- * 返回登录页面
+ * 清除用户信息并返回登录页面
  */
 function logout() {
     if (confirm('确定要退出登录吗？')) {
+        // 清除localStorage中的用户信息
+        localStorage.removeItem('userInfo');
+        // 跳转到登录页面
         window.location.href = '../experiment3/login.html';
+    }
+}
+
+/**
+ * 获取当前登录用户信息
+ * @returns {Object|null} 用户信息对象，包含username和loginTime
+ */
+function getUserInfo() {
+    try {
+        var userInfoStr = localStorage.getItem('userInfo');
+        return userInfoStr ? JSON.parse(userInfoStr) : null;
+    } catch (e) {
+        console.error('获取用户信息失败:', e);
+        return null;
+    }
+}
+
+/**
+ * 检查登录状态
+ * 如果未登录则跳转到登录页面
+ */
+function checkLogin() {
+    var userInfo = getUserInfo();
+    if (!userInfo || !userInfo.username) {
+        // 未登录，跳转到登录页面
+        window.location.href = '../experiment3/login.html';
+        return false;
+    }
+    return true;
+}
+
+/**
+ * 更新欢迎信息显示
+ */
+function updateWelcomeMessage() {
+    var userInfo = getUserInfo();
+    var welcomeText = document.getElementById('welcome-text');
+    if (userInfo && userInfo.username && welcomeText) {
+        welcomeText.textContent = '欢迎回来，' + userInfo.username;
+    }
+}
+
+/**
+ * 处理来自 iframe 的消息
+ * @param {MessageEvent} event - 消息事件对象
+ */
+function handleIframeMessage(event) {
+    // 验证消息来源（可选，但建议使用）
+    // if (event.origin !== 'expected-origin') return;
+    
+    if (event.data && event.data.action) {
+        switch (event.data.action) {
+            case 'loadPage':
+                // 从 iframe 收到页面切换请求
+                if (event.data.pageName) {
+                    loadPage(event.data.pageName);
+                }
+                break;
+            default:
+                console.log('Unknown action:', event.data.action);
+        }
     }
 }
 
@@ -77,5 +141,13 @@ function logout() {
  */
 window.onload = function() {
     console.log('工作台页面加载完成');
-    // 可以在这里添加更多初始化逻辑
+    
+    // 检查登录状态
+    if (checkLogin()) {
+        // 更新欢迎信息
+        updateWelcomeMessage();
+    }
+    
+    // 添加消息监听器，接收来自 iframe 的消息
+    window.addEventListener('message', handleIframeMessage, false);
 };
