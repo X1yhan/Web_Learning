@@ -1,513 +1,86 @@
+﻿<!--
+ * Vue 3 红绿灯模拟应用
+ * 功能：模拟交通信号灯的自动切换、手动控制和倒计时显示
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- 字符编码设置 -->
     <meta charset="UTF-8">
+    <!-- 响应式视图设置 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue 3 红绿灯模拟器</title>
+    <!-- 页面标题 -->
+    <title>Vue 3 Traffic Light</title>
+    <!-- 引入 Vue 3 全局脚本 -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 800px;
-            width: 100%;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .traffic-light-container {
-            display: flex;
-            justify-content: center;
-            gap: 60px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .traffic-light {
-            background: linear-gradient(145deg, #2c3e50, #34495e);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.4),
-                inset 0 2px 10px rgba(255, 255, 255, 0.1);
-            border: 4px solid #1a252f;
-        }
-
-        .light {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 15px 0;
-            background: #333;
-            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .light::before {
-            content: '';
-            position: absolute;
-            top: 15%;
-            left: 20%;
-            width: 30%;
-            height: 30%;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            filter: blur(5px);
-        }
-
-        .light.red.active {
-            background: radial-gradient(circle at 30% 30%, #ff6b6b, #c0392b);
-            box-shadow: 
-                0 0 60px rgba(231, 76, 60, 0.8),
-                inset 0 5px 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .light.yellow.active {
-            background: radial-gradient(circle at 30% 30%, #ffd93d, #f39c12);
-            box-shadow: 
-                0 0 60px rgba(241, 196, 15, 0.8),
-                inset 0 5px 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .light.yellow.blinking {
-            animation: blink 0.5s infinite;
-        }
-
-        @keyframes blink {
-            0%, 50% {
-                background: radial-gradient(circle at 30% 30%, #ffd93d, #f39c12);
-                box-shadow: 0 0 60px rgba(241, 196, 15, 0.8);
-            }
-            51%, 100% {
-                background: #333;
-                box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.5);
-            }
-        }
-
-        .light.green.active {
-            background: radial-gradient(circle at 30% 30%, #2ecc71, #27ae60);
-            box-shadow: 
-                0 0 60px rgba(46, 204, 113, 0.8),
-                inset 0 5px 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .pole {
-            width: 20px;
-            height: 100px;
-            background: linear-gradient(90deg, #555, #777, #555);
-            margin: 0 auto;
-            border-radius: 0 0 10px 10px;
-        }
-
-        .info-panel {
-            background: linear-gradient(145deg, #ecf0f1, #bdc3c7);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 2px solid #95a5a6;
-        }
-
-        .status-display {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .current-status {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-        }
-
-        .current-status.red { color: #e74c3c; }
-        .current-status.yellow { color: #f39c12; }
-        .current-status.green { color: #27ae60; }
-
-        .countdown {
-            font-size: 3em;
-            font-weight: bold;
-            color: #2c3e50;
-            font-family: 'Courier New', monospace;
-        }
-
-        .mode-indicator {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-
-        .mode-indicator.auto {
-            background: #3498db;
-            color: white;
-        }
-
-        .mode-indicator.manual {
-            background: #e67e22;
-            color: white;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn:active {
-            transform: translateY(-1px);
-        }
-
-        .btn-red {
-            background: linear-gradient(145deg, #e74c3c, #c0392b);
-            color: white;
-        }
-
-        .btn-yellow {
-            background: linear-gradient(145deg, #f1c40f, #f39c12);
-            color: #333;
-        }
-
-        .btn-green {
-            background: linear-gradient(145deg, #2ecc71, #27ae60);
-            color: white;
-        }
-
-        .btn-mode {
-            background: linear-gradient(145deg, #3498db, #2980b9);
-            color: white;
-        }
-
-        .btn-reset {
-            background: linear-gradient(145deg, #95a5a6, #7f8c8d);
-            color: white;
-        }
-
-        .rules-panel {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            border-left: 5px solid #3498db;
-        }
-
-        .rules-panel h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-
-        .rules-panel ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        .rules-panel li {
-            padding: 8px 0;
-            color: #555;
-            border-bottom: 1px solid #eee;
-        }
-
-        .rules-panel li:last-child {
-            border-bottom: none;
-        }
-
-        .rules-panel li::before {
-            content: '🚦 ';
-            margin-right: 10px;
-        }
-
-        .vehicle-status {
-            text-align: center;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
-        .vehicle-status.stop {
-            background: #ffebee;
-            color: #c0392b;
-            border: 2px solid #e74c2b;
-        }
-
-        .vehicle-status.caution {
-            background: #fff9e6;
-            color: #d68910;
-            border: 2px solid #f1c40f;
-        }
-
-        .vehicle-status.go {
-            background: #e8f5e9;
-            color: #27ae60;
-            border: 2px solid #2ecc71;
-        }
-
-        @media (max-width: 600px) {
-            .traffic-light-container {
-                gap: 30px;
-            }
-            
-            .light {
-                width: 70px;
-                height: 70px;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-            }
-            
-            .countdown {
-                font-size: 2em;
-            }
-        }
-    </style>
+    <!-- 引入样式文件 -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Vue 应用挂载点 -->
     <div id="app">
+        <!-- 主容器：包含红绿灯和控制面板 -->
         <div class="container">
-            <h1>🚦 Vue 3 智能红绿灯系统</h1>
-            
-            <div class="traffic-light-container">
-                <div class="traffic-light-wrapper">
-                    <div class="traffic-light">
+            <!-- 红绿灯外壳 -->
+            <div class="traffic-light-box">
+                <!-- 灯组容器 -->
+                <div class="light-container">
+                    <!-- 红灯包装器 -->
+                    <div class="light-wrapper">
+                        <!-- 红灯：当 currentLight === 'red' 时激活 -->
                         <div class="light red" :class="{ active: currentLight === 'red' }"></div>
-                        <div class="light yellow" :class="{ active: currentLight === 'yellow', blinking: currentLight === 'yellow' && isBlinking }"></div>
-                        <div class="light green" :class="{ active: currentLight === 'green' }"></div>
                     </div>
-                    <div class="pole"></div>
+                    <!-- 黄灯包装器 -->
+                    <div class="light-wrapper">
+                        <!-- 黄灯：当 currentLight === 'yellow' 时激活，同时显示倒计时 -->
+                        <div class="light yellow" :class="{ active: currentLight === 'yellow' }">
+                            <!-- 倒计时数字：仅在 showCountdown 为 true 时显示 -->
+                            <span v-if="showCountdown" class="countdown-text" :class="{ flashing: isGreenFlashing }">
+                                {{ countdown }}
+                            </span>
+                        </div>
+                    </div>
+                    <!-- 绿灯包装器 -->
+                    <div class="light-wrapper">
+                        <!-- 绿灯：当 currentLight === 'green' 时激活，倒计时最后3秒闪烁 -->
+                        <div class="light green" :class="{ active: currentLight === 'green', flashing: isGreenFlashing }"></div>
+                    </div>
                 </div>
             </div>
-
-            <div class="info-panel">
+            
+            <!-- 控制面板 -->
+            <div class="control-panel">
+                <!-- 面板标题 -->
+                <h2 class="panel-title">Control Panel</h2>
+                
+                <!-- 状态显示区域 -->
                 <div class="status-display">
-                    <div class="current-status" :class="currentLight">
-                        {{ statusText }}
-                    </div>
-                    <div class="countdown">{{ countdown }}秒</div>
-                    <div class="mode-indicator" :class="isAuto ? 'auto' : 'manual'">
-                        {{ isAuto ? '🔁 自动模式' : '👆 手动模式' }}
-                    </div>
+                    <!-- 当前状态文本 -->
+                    <div class="status-text">{{ statusText }}</div>
+                    <!-- 倒计时显示（非保持模式时显示） -->
+                    <div v-if="!isHolding">Countdown: {{ countdown }}s</div>
                 </div>
-
-                <div class="vehicle-status" :class="vehicleStatusClass">
-                    {{ vehicleInstruction }}
+                
+                <!-- 时间间隔输入框组 -->
+                <div class="input-group">
+                    <label>Time Interval (seconds)</label>
+                    <!-- 数字输入框：绑定 timeInterval，范围 5-120 秒 -->
+                    <input type="number" class="time-input" v-model.number="timeInterval" min="5" max="120" @change="updateInterval">
                 </div>
-            </div>
-
-            <div class="controls">
-                <button class="btn btn-red" @click="setLight('red')" :disabled="isAuto">
-                    🔴 红灯
-                </button>
-                <button class="btn btn-yellow" @click="setLight('yellow')" :disabled="isAuto">
-                    🟡 黄灯
-                </button>
-                <button class="btn btn-green" @click="setLight('green')" :disabled="isAuto">
-                    🟢 绿灯
-                </button>
-                <button class="btn btn-mode" @click="toggleMode">
-                    {{ isAuto ? '⏸️ 切换手动' : '▶️ 切换自动' }}
-                </button>
-                <button class="btn btn-reset" @click="resetTraffic">
-                    🔄 重置
-                </button>
-            </div>
-
-            <div class="rules-panel">
-                <h3>📋 交通规则说明</h3>
-                <ul>
-                    <li><strong>绿灯</strong>：准许通行，车辆可正常通过路口</li>
-                    <li><strong>黄灯</strong>：警示过渡，已越过停车线的车辆可继续通行，未越线车辆应准备停车</li>
-                    <li><strong>红灯</strong>：禁止通行，车辆必须在停车线前等候</li>
-                    <li>标准循环顺序：绿灯 → 黄灯 → 红灯 → 绿灯...</li>
-                </ul>
+                
+                <!-- 控制按钮组 -->
+                <div class="button-group">
+                    <!-- 保持红灯按钮 -->
+                    <button class="control-btn btn-red" :class="{ active: holdMode === 'red' }" @click="holdRed">Hold Red</button>
+                    <!-- 保持绿灯按钮 -->
+                    <button class="control-btn btn-green" :class="{ active: holdMode === 'green' }" @click="holdGreen">Hold Green</button>
+                    <!-- 恢复自动模式按钮 -->
+                    <button class="control-btn btn-resume" @click="resumeAuto">Resume Auto</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        const { createApp } = Vue;
-
-        createApp({
-            data() {
-                return {
-                    currentLight: 'red',
-                    countdown: 0,
-                    isAuto: true,
-                    isBlinking: false,
-                    timer: null,
-                    durations: {
-                        green: 10,
-                        yellow: 3,
-                        red: 10
-                    },
-                    lightSequence: ['green', 'yellow', 'red'],
-                    sequenceIndex: 2
-                };
-            },
-
-            computed: {
-                statusText() {
-                    const texts = {
-                        red: '红灯 - 停止',
-                        yellow: '黄灯 - 警示',
-                        green: '绿灯 - 通行'
-                    };
-                    return texts[this.currentLight];
-                },
-
-                vehicleStatusClass() {
-                    const classes = {
-                        red: 'stop',
-                        yellow: 'caution',
-                        green: 'go'
-                    };
-                    return classes[this.currentLight];
-                },
-
-                vehicleInstruction() {
-                    const instructions = {
-                        red: '🚫 禁止通行 - 请在停车线前等候',
-                        yellow: '⚠️ 谨慎通行 - 已越线可继续，未越线请停车',
-                        green: '✅ 准许通行 - 请安全通过路口'
-                    };
-                    return instructions[this.currentLight];
-                }
-            },
-
-            methods: {
-                setLight(light) {
-                    if (this.isAuto) return;
-                    
-                    this.currentLight = light;
-                    this.countdown = this.durations[light];
-                    this.isBlinking = light === 'yellow';
-                    
-                    this.sequenceIndex = this.lightSequence.indexOf(light);
-                },
-
-                nextLight() {
-                    this.sequenceIndex = (this.sequenceIndex + 1) % this.lightSequence.length;
-                    this.currentLight = this.lightSequence[this.sequenceIndex];
-                    this.countdown = this.durations[this.currentLight];
-                    this.isBlinking = this.currentLight === 'yellow';
-                },
-
-                toggleMode() {
-                    this.isAuto = !this.isAuto;
-                    
-                    if (this.isAuto) {
-                        this.startAutoMode();
-                    } else {
-                        this.stopTimer();
-                    }
-                },
-
-                startAutoMode() {
-                    this.stopTimer();
-                    this.timer = setInterval(() => {
-                        this.countdown--;
-                        
-                        if (this.countdown <= 0) {
-                            this.nextLight();
-                        }
-                    }, 1000);
-                },
-
-                stopTimer() {
-                    if (this.timer) {
-                        clearInterval(this.timer);
-                        this.timer = null;
-                    }
-                },
-
-                resetTraffic() {
-                    this.stopTimer();
-                    this.sequenceIndex = 2;
-                    this.currentLight = 'red';
-                    this.countdown = this.durations.red;
-                    this.isBlinking = false;
-                    
-                    if (this.isAuto) {
-                        this.startAutoMode();
-                    }
-                }
-            },
-
-            beforeMount() {
-                console.log('🚦 红绿灯系统准备启动...');
-            },
-
-            mounted() {
-                console.log('✅ 红绿灯系统已启动');
-                console.log('当前状态:', this.currentLight);
-                console.log('运行模式:', this.isAuto ? '自动' : '手动');
-                
-                if (this.isAuto) {
-                    this.startAutoMode();
-                }
-            },
-
-            beforeUpdate() {
-            },
-
-            updated() {
-            },
-
-            beforeUnmount() {
-                console.log('🛑 红绿灯系统即将关闭...');
-                this.stopTimer();
-            },
-
-            unmounted() {
-                console.log('✅ 红绿灯系统已关闭');
-            }
-        }).mount('#app');
-    </script>
+    <!-- 引入应用逻辑脚本 -->
+    <script src="js/app.js"></script>
 </body>
 </html>
